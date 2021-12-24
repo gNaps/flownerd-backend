@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model login_token {
+  token                  String   @id(map: "login_token_pk") @db.VarChar
+  user                   Int
+  created_at             DateTime @default(now()) @db.Timestamp(6)
+  user_login_tokenTouser user     @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "login_token_fk")
+}
+
+model user {
+  id          Int           @id(map: "user_pk") @default(autoincrement())
+  username    String?       @unique(map: "user_un_username") @db.VarChar
+  firstname   String?       @db.VarChar
+  lastname    String?       @db.VarChar
+  valid       Boolean       @default(false)
+  email       String        @unique(map: "user_un_email") @db.VarChar
+  login_token login_token[]
+}
