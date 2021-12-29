@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { UserPrisma } from "../../model/User";
-import apicalypse from "apicalypse";
+import apicalypse, { ApicalypseConfig } from "apicalypse";
 import { getRequestOptionsIgdb } from "../../utils/utils";
 import { videogameFilters } from "../../model/Videogames";
 
 const prisma = new PrismaClient();
-const requestOptions = getRequestOptionsIgdb();
+const requestOptions: ApicalypseConfig = getRequestOptionsIgdb();
 
 const searchVideogames = async (filters: videogameFilters) => {
   const response = await apicalypse(requestOptions)
