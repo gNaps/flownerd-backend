@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { authService } from "../api/auth/authService";
 import jwt from "jsonwebtoken";
+import { userService } from "../api/user/userService";
 
 /**
  * Funzione di supporto che verifica se il token è valido per la chiamata in corso
@@ -24,12 +25,13 @@ export const verifyToken = async (
   jwt.verify(
     token,
     process.env.TOKEN_SECRET as string,
-    (err: any, user: any) => {
+    async (err: any, user: any) => {
       if (err) {
+        console.log(err);
         return res.sendStatus(403);
       }
 
-      req.CurrentUser = user;
+      req.CurrentUser = await userService.getByEmail(user.email);
       next();
     }
   );
@@ -46,7 +48,7 @@ export const verifyPolicy = async (
     route: { path: route },
     CurrentUser,
   } = req;
-  console.log(`${method} => ${route}, user: ${CurrentUser.id}`)
+  console.log(`${method} => ${route}, user: ${CurrentUser.id}`);
   const result = await authService.verifyPolicy(method, route, CurrentUser);
 
   // if (!result || result.length == 0) {

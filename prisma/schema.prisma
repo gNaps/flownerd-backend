@@ -22,4 +22,22 @@ model user {
   valid       Boolean       @default(false)
   email       String        @unique(map: "user_un_email") @db.VarChar
   login_token login_token[]
+  videogame   videogame[]
+}
+
+model videogame {
+  id                   Int              @id(map: "videogame_pk") @default(autoincrement())
+  user                 Int
+  id_external          Int
+  status               Int?
+  videogame_status     videogame_status @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "videogame_status_fk")
+  user_userTovideogame user             @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "videogame_fk")
+
+  @@unique([id, user], map: "videogame_un")
+}
+
+model videogame_status {
+  id        Int        @id(map: "videogame_status_pk") @default(autoincrement())
+  status    String     @db.VarChar
+  videogame videogame?
 }
