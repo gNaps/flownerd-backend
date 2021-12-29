@@ -23,6 +23,7 @@ model user {
   email       String        @unique(map: "user_un_email") @db.VarChar
   login_token login_token[]
   videogame   videogame[]
+  serietv     serietv[]
 }
 
 model videogame {
@@ -40,4 +41,21 @@ model videogame_status {
   id        Int        @id(map: "videogame_status_pk") @default(autoincrement())
   status    String     @db.VarChar
   videogame videogame?
+}
+
+model serietv {
+  id                 Int            @id(map: "serietv_pk") @default(autoincrement())
+  user               Int
+  id_external        Int
+  status             Int?
+  serietv_status     serietv_status @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "serietv_status_fk")
+  user_userToserietv user           @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "serietv_fk")
+
+  @@unique([id, user], map: "serietv_un")
+}
+
+model serietv_status {
+  id      Int      @id(map: "serietv_status_pk") @default(autoincrement())
+  status  String   @db.VarChar
+  serietv serietv?
 }

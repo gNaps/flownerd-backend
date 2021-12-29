@@ -25,7 +25,7 @@ router
 
 router
   .route("/user/:id")
-  .get(verifyToken, verifyPolicy, videogameController.getVideogameById);
+  .get(verifyToken, verifyPolicy, videogameController.getVideogamesByUser);
 
 export const videogameRouter = {
   router,
